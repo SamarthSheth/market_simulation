@@ -7,8 +7,8 @@ from order_book import OrderBook, Trade
 
 
 class PriceProcess:
-    def __init__(self, curr_price, curr_time, mu, sigma, rng) -> None:
-        self.curr_price = curr_price
+    def __init__(self, curr_price : float, curr_time : float, mu : float, sigma : float, rng : np.random.Generator) -> None:
+        self.curr_price = curr_price #i might replace this with max(0.001, curr_price) to prevent negative prices
         self.curr_time = curr_time
         #self.config = config
         self.mu = mu

@@ -59,8 +59,8 @@ class OrderBook:
 
     '''
     def __init__(self) -> None:
-        self._bids: SortedDict[float, deque] = SortedDict() #like Map(price, deque(Orders)) will store 100, 99.5 like [-100, -99.5] so we can peekitem(0) to get the best bid
-        self._asks: SortedDict[float, deque] = SortedDict()
+        self._bids: SortedDict[float, deque] = SortedDict() # type: ignore #like Map(price, deque(Orders)) will store 100, 99.5 like [-100, -99.5] so we can peekitem(0) to get the best bid
+        self._asks: SortedDict[float, deque] = SortedDict() # type: ignore
         self._trade_log: List[Trade] = []
         self._next_trade_id: int = 0
         
@@ -68,13 +68,13 @@ class OrderBook:
     def best_bid(self) -> float | None:
         if not self._bids:
             return None
-        return -self._bids.peekitem(0)[0] #equiv to -self._bids.keys()[0]
+        return -self._bids.peekitem(0)[0] # type: ignore #equiv to -self._bids.keys()[0]
     
     @property
     def best_ask(self) -> float | None:
         if not self._asks:
             return None
-        return self._asks.peekitem(0)[0]
+        return self._asks.peekitem(0)[0] # type: ignore
         
     def add_limit_order(self, order: Order):
         if order.order_type != OrderType.LIMIT:
@@ -101,9 +101,9 @@ class OrderBook:
         resting_side = Side.BUY if order.side == Side.SELL else Side.SELL
         while order.size > 0 and book:
             price_key, orders = book.peekitem(0) #best price level
-            resting_price = -price_key if resting_side == Side.BUY else price_key
+            resting_price = -price_key if resting_side == Side.BUY else price_key # type: ignore
             if price_limit is not None:
-                if (resting_side == Side.BUY and resting_price < price_limit) or (resting_side == Side.SELL and resting_price > price_limit):
+                if (resting_side == Side.BUY and resting_price < price_limit) or (resting_side == Side.SELL and resting_price > price_limit): # type: ignore
                     break # stop matching if best resting price is worse than limit
             
             resting_order = orders[0]
