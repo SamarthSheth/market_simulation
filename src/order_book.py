@@ -1,6 +1,5 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-import re
 from typing import List
 from collections import deque
 from sortedcontainers import SortedDict
@@ -170,5 +169,16 @@ class OrderBook:
         if best_bid is None or best_ask is None:
             return None
         return best_ask - best_bid
+    
+    def cancel_trader_orders(self, trader_id: str):
+        """Remove all orders from a specific trader."""
+        for book in [self._bids, self._asks]:
+            empty_levels = []
+            for price_key, orders in book.items():
+                book[price_key] = deque(o for o in orders if o.trader_id != trader_id)
+                if not book[price_key]:
+                    empty_levels.append(price_key)
+            for key in empty_levels:
+                del book[key]
 
         
